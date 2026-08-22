@@ -2,16 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:themeandlanguage/ui/screens/editevent.dart';
 import 'package:themeandlanguage/utils/app_color.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventDetail extends StatelessWidget{
+  final String documentId;
   final String title;
   final String description;
   final String date;
   final String time;
   final String image;
   final String cagegory;
+
   const EventDetail({
     super.key,
+    required this.documentId,
   required this.title,
   required this.description,
     required this.date,
@@ -63,6 +67,18 @@ class EventDetail extends StatelessWidget{
               ),),);
               if( result != null)
                 {
+                  await FirebaseFirestore.instance.collection('events').doc(documentId).update(
+                      {
+                        'title' :result['title'],
+                        'description': result ['description'],
+                        'date': result ['date'],
+                        'time': result ['time'],
+                        'category': result ['category'],
+                        'image': result ['image'],
+                      });
+                  if(context.mounted){
+                    Navigator.pop(context,true);
+                  }
 
                 }
             },
@@ -75,7 +91,15 @@ class EventDetail extends StatelessWidget{
                   color: AppColor.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: IconButton(onPressed: (){},
+                child: IconButton(onPressed: () async{
+                  await FirebaseFirestore.instance
+                      .collection('events')
+                      .doc(documentId).delete();
+                  if(context.mounted){
+                    Navigator.pop(context,true);
+                  }
+
+                },
                     icon: const Icon(Icons.delete_outline, size: 20,color: AppColor.errorlight,
                     ),),
               ),)
@@ -87,7 +111,7 @@ class EventDetail extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [Container(
             width: double.infinity,
-            height: 117,
+            height: 150,
             decoration: BoxDecoration(
               color: AppColor.white,
               borderRadius: BorderRadius.circular(10),
@@ -122,14 +146,22 @@ class EventDetail extends StatelessWidget{
                   child: const Icon(Icons.calendar_month_outlined,size: 18,
                   color: AppColor.primaray,),),
                   const SizedBox(width: 12,),
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       Text(date,style: TextStyle(
                         fontSize: 10,
-                        color: AppColor.grey
+                        color: AppColor.black
                       ),
                       ),
+                      Text(time,style: TextStyle(
+                          fontSize: 10,
+                          color: AppColor.grey
+                      ),
+                      ),
+
                     ],
                   ),
                 ],
