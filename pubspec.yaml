@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter_native_splash: ^2.4.8
+  cloud_firestore: ^6.0.0
   flutter:
     sdk: flutter
 
@@ -39,6 +40,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  firebase_core: ^4.13.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +68,9 @@ flutter:
 
   assets:
       - assets/images/
+      - assets/images/Birthday.png
+      - assets/images/book.png
+      - assets/images/Sport.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
